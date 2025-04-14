@@ -1,0 +1,61 @@
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fira+Sans:wght@400;500;700&display=swap');
+
+:root {
+  /* Light theme (default) */
+  --purple-1: #fffcff;
+  --purple-2: #fdf7fe;
+  --purple-3: #fbeafd;
+  --purple-4: #f8ddfc;
+  --purple-5: #f3d0f8;
+  --purple-6: #ecbff1;
+  --purple-7: #e1aae9;
+  --purple-8: #d48cde;
+  --purple-9: #7f0b8e;
+  --purple-10: #6d007c;
+  --purple-11: #9b32aa;
+  --purple-12: #570f61;
+  --purple-13: #230928;
+  --purple-14: #8250df;
+  --blue-1: #5315f6;
+  --blue-2: #41d1ff;
+  --yellow-1: #ffc93b;
+  
+  --focus-ring-color: var(--yellow-6);
+
+  /* Default theme variables */
+  --background: var(--purple-1);
+  --text: #000000;
+  --primary: var(--purple-10);
+  --primary-hover: var(--purple-12);
+  --button-text: #ffffff;
+  
+  /* Typography */
+  --font-heading: 'Fira Sans', sans-serif;
+  --font-body: 'Atkinson Hyperlegible', sans-serif;
+  
+  /* Focus styles */
+  --focus-ring-color: var(--blue-1);
+  --focus-ring-style: dashed;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
+
+/* Dark theme */
+body.dark {
+  --focus-ring-color: var(--yellow-1);
+  --focus-ring-style: dashed;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --background: var(--purple-13);
+  --text: #ffffff;
+  --primary: var(--purple-10);
+  --primary-hover: var(--purple-12);
+  --button-text: #ffffff;
+}
+
+/* Focus styles */
+:focus {
+  outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+} 
