@@ -1,61 +1,264 @@
-/* Import fonts */
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fira+Sans:wght@400;500;700&display=swap');
+/* src/styles/variables.css */
 
-:root {
-  /* Light theme (default) */
-  --purple-1: #fffcff;
-  --purple-2: #fdf7fe;
-  --purple-3: #fbeafd;
-  --purple-4: #f8ddfc;
-  --purple-5: #f3d0f8;
-  --purple-6: #ecbff1;
-  --purple-7: #e1aae9;
-  --purple-8: #d48cde;
-  --purple-9: #7f0b8e;
-  --purple-10: #6d007c;
-  --purple-11: #9b32aa;
-  --purple-12: #570f61;
-  --purple-13: #230928;
-  --purple-14: #8250df;
-  --blue-1: #5315f6;
-  --blue-2: #41d1ff;
-  --yellow-1: #ffc93b;
-  
-  --focus-ring-color: var(--yellow-6);
+/* Modern CSS with cascade layers for better organization */
+@layer theme, utilities, components;
 
-  /* Default theme variables */
-  --background: var(--purple-1);
-  --text: #000000;
-  --primary: var(--purple-10);
-  --primary-hover: var(--purple-12);
-  --button-text: #ffffff;
-  
-  /* Typography */
-  --font-heading: 'Fira Sans', sans-serif;
-  --font-body: 'Atkinson Hyperlegible', sans-serif;
-  
-  /* Focus styles */
-  --focus-ring-color: var(--blue-1);
-  --focus-ring-style: dashed;
-  --focus-ring-width: 2px;
-  --focus-ring-offset: 2px;
+@layer theme {
+  /* IBM Plex Font Import */
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  /* CSS Custom Properties with @property for animations */
+  @property --hue-primary {
+    syntax: '<number>';
+    initial-value: 285;
+    inherits: true;
+  }
+
+  @property --theme-opacity {
+    syntax: '<number>';
+    initial-value: 1;
+    inherits: true;
+  }
+
+  @property --glow-intensity {
+    syntax: '<percentage>';
+    initial-value: 0%;
+    inherits: true;
+  }
+
+  :root {
+    /* Enable color-scheme for native UI elements */
+    color-scheme: light dark;
+    
+    /* Core color hues */
+    --hue-primary: 285;
+    --hue-accent: 230;
+    --hue-warning: 45;
+    --hue-success: 150;
+    --hue-error: 5;
+    
+    /* Modern color system using oklch() for perceptually uniform colors */
+    /* Light mode colors (default) */
+    --color-bg: oklch(98% 0.01 var(--hue-primary));
+    --color-surface: oklch(96% 0.02 var(--hue-primary));
+    --color-surface-raised: oklch(99% 0.01 var(--hue-primary));
+    --color-text: oklch(20% 0.05 var(--hue-primary));
+    --color-text-muted: oklch(45% 0.04 var(--hue-primary));
+    --color-primary: oklch(55% 0.25 var(--hue-primary));
+    --color-primary-hover: oklch(50% 0.28 var(--hue-primary));
+    --color-accent: oklch(65% 0.20 var(--hue-accent));
+    --color-border: oklch(90% 0.02 var(--hue-primary));
+    
+    /* Using light-dark() function for automatic theme switching */
+    --adaptive-shadow: light-dark(
+      0 1px 3px oklch(0% 0 0 / 0.12),
+      0 1px 3px oklch(0% 0 0 / 0.5)
+    );
+    
+    /* Typography with IBM Plex */
+    --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --font-serif: 'IBM Plex Serif', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+    
+    /* Fluid typography using clamp() and container queries */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.2cqi, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.3cqi, 1rem);
+    --text-base: clamp(1rem, 0.95rem + 0.4cqi, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.5cqi, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 0.75cqi, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.3rem + 1cqi, 2rem);
+    --text-3xl: clamp(2rem, 1.7rem + 1.5cqi, 2.5rem);
+    --text-4xl: clamp(2.5rem, 2rem + 2.5cqi, 3.5rem);
+    
+    /* Spacing scale using Space Toggle technique */
+    --space-3xs: clamp(0.25rem, 0.23rem + 0.1cqi, 0.3125rem);
+    --space-2xs: clamp(0.5rem, 0.46rem + 0.2cqi, 0.625rem);
+    --space-xs: clamp(0.75rem, 0.69rem + 0.3cqi, 0.9375rem);
+    --space-s: clamp(1rem, 0.92rem + 0.4cqi, 1.25rem);
+    --space-m: clamp(1.5rem, 1.38rem + 0.6cqi, 1.875rem);
+    --space-l: clamp(2rem, 1.84rem + 0.8cqi, 2.5rem);
+    --space-xl: clamp(3rem, 2.76rem + 1.2cqi, 3.75rem);
+    --space-2xl: clamp(4rem, 3.68rem + 1.6cqi, 5rem);
+    
+    /* Animation timing with linear() easing */
+    --ease-bounce: linear(
+      0, 0.004, 0.016, 0.035, 0.063, 0.098, 0.141, 0.191, 0.25, 0.316, 0.391,
+      0.563, 0.766, 0.812, 0.85, 0.88, 0.901, 0.914, 0.92, 0.918, 0.908, 0.891,
+      0.866, 0.833, 0.792, 0.744, 0.688, 0.625, 0.565, 0.512, 0.468, 0.432,
+      0.403, 0.383, 0.37, 0.365, 0.368, 0.379, 0.397, 0.424, 0.458, 0.5, 0.55,
+      0.607, 0.672, 0.745, 0.825, 0.885, 0.935, 0.975, 1.003, 1.02, 1.027, 1.023,
+      1.008, 0.983, 0.963, 0.948, 0.938, 0.933, 0.933, 0.938, 0.948, 0.974, 1
+    );
+    
+    --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    
+    /* Focus styles for WCAG 2.1 compliance */
+    --focus-color: oklch(70% 0.20 60);
+    --focus-width: 3px;
+    --focus-offset: 2px;
+    --focus-style: solid;
+    
+    /* Scroll-driven animations */
+    --scroll-timeline: scroll(root);
+    --view-timeline: view();
+    
+    /* Container query units */
+    --container-inline-size: 100cqi;
+    --container-block-size: 100cqb;
+  }
+
+  /* Dark mode using prefers-color-scheme */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-bg: oklch(12% 0.02 var(--hue-primary));
+      --color-surface: oklch(18% 0.03 var(--hue-primary));
+      --color-surface-raised: oklch(22% 0.03 var(--hue-primary));
+      --color-text: oklch(95% 0.02 var(--hue-primary));
+      --color-text-muted: oklch(70% 0.03 var(--hue-primary));
+      --color-primary: oklch(70% 0.20 var(--hue-primary));
+      --color-primary-hover: oklch(75% 0.22 var(--hue-primary));
+      --color-accent: oklch(75% 0.18 var(--hue-accent));
+      --color-border: oklch(25% 0.03 var(--hue-primary));
+      --focus-color: oklch(85% 0.15 60);
+      --glow-intensity: 20%;
+    }
+  }
+
+  /* Manual dark mode class override */
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --color-bg: oklch(12% 0.02 var(--hue-primary));
+    --color-surface: oklch(18% 0.03 var(--hue-primary));
+    --color-surface-raised: oklch(22% 0.03 var(--hue-primary));
+    --color-text: oklch(95% 0.02 var(--hue-primary));
+    --color-text-muted: oklch(70% 0.03 var(--hue-primary));
+    --color-primary: oklch(70% 0.20 var(--hue-primary));
+    --color-primary-hover: oklch(75% 0.22 var(--hue-primary));
+    --color-accent: oklch(75% 0.18 var(--hue-accent));
+    --color-border: oklch(25% 0.03 var(--hue-primary));
+    --focus-color: oklch(85% 0.15 60);
+    --glow-intensity: 20%;
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --color-text: oklch(10% 0 0);
+      --color-bg: oklch(100% 0 0);
+      --color-primary: oklch(40% 0.35 var(--hue-primary));
+      --focus-width: 4px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-text: oklch(100% 0 0);
+        --color-bg: oklch(0% 0 0);
+        --color-primary: oklch(80% 0.25 var(--hue-primary));
+      }
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
-/* Dark theme */
-body.dark {
-  --focus-ring-color: var(--yellow-1);
-  --focus-ring-style: dashed;
-  --focus-ring-width: 2px;
-  --focus-ring-offset: 2px;
-  --background: var(--purple-13);
-  --text: #ffffff;
-  --primary: var(--purple-10);
-  --primary-hover: var(--purple-12);
-  --button-text: #ffffff;
+@layer utilities {
+  /* Modern utility classes using has() and :is() */
+  .theme-transition {
+    transition: 
+      background-color 200ms var(--ease-out-expo),
+      color 200ms var(--ease-out-expo),
+      border-color 200ms var(--ease-out-expo);
+  }
+
+  /* Container queries */
+  .container {
+    container-type: inline-size;
+    container-name: main;
+  }
+
+  /* Subgrid support */
+  .grid-subgrid {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+  }
+
+  /* Modern gradient text */
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      var(--color-primary) 0%,
+      var(--color-accent) 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  /* Scroll-driven animations */
+  @supports (animation-timeline: scroll()) {
+    .scroll-fade-in {
+      animation: fadeIn linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+
+  /* Text balancing */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Logical properties */
+  .flow-space > * + * {
+    margin-block-start: var(--space-m);
+  }
+
+  /* Focus visible only for keyboard navigation */
+  :focus-visible {
+    outline: var(--focus-width) var(--focus-style) var(--focus-color);
+    outline-offset: var(--focus-offset);
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
-/* Focus styles */
-:focus {
-  outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
-  outline-offset: var(--focus-ring-offset);
-} 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px var(--color-primary);
+  }
+  to {
+    box-shadow: 0 0 20px var(--color-primary), 0 0 40px var(--color-accent);
+  }
+}

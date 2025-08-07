@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -11,7 +12,8 @@
     "lint:fix": "eslint . --ext .js,.ts,.astro --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "type-check": "astro check && tsc --noEmit"
+    "type-check": "astro check && tsc --noEmit",
+    "test:a11y": "pa11y http://localhost:4321 --standard WCAG2AAA"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.3",
@@ -32,7 +34,17 @@
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-astro": "^1.3.1",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-prettier": "^5.2.6",
-    "prettier": "^3.5.3"
-  }
+    "pa11y": "^8.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-astro": "^0.17.0",
+    "typescript": "^5.8.3"
+  },
+  "browserslist": [
+    "defaults and supports css-cascade-layers",
+    "supports color-function",
+    "supports css-color-mix",
+    "supports css-container-queries"
+  ]
 }

@@ -1,13 +1,11 @@
 ---
+// src/layouts/Layout.astro
 interface Props {
   title: string;
   description?: string;
 }
 
-const { title, description = 'My portfolio website' } = Astro.props;
-
-// Import Utrecht CSS
-import '@utrecht/component-library-css/dist/index.css';
+const { title, description = 'Modern portfolio with cutting-edge CSS and accessibility' } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -15,43 +13,250 @@ import '@utrecht/component-library-css/dist/index.css';
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fffcff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1f0823" media="(prefers-color-scheme: dark)" />
+    
+    <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+    
+    <!-- IBM Plex Fonts with display swap for better performance -->
+    <link 
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" 
+      rel="stylesheet" 
+    />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Open Graph for better sharing -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    
     <title>{title}</title>
+    
+    <!-- Preload critical fonts -->
+    <link 
+      rel="preload" 
+      href="https://fonts.gstatic.com/s/ibmplexsans/v19/zYX9KVElMYYaJe8bpLHnCwDKjSL9AIFsdP3pBms.woff2" 
+      as="font" 
+      type="font/woff2" 
+      crossorigin 
+    />
   </head>
   <body>
-    <div class="utrecht-theme utrecht-document">
-      <slot />
-    </div>
+    <!-- Immediate theme application to prevent flash -->
+    <script is:inline>
+      // Apply saved theme immediately to prevent flash
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme && savedTheme !== 'auto') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+    </script>
+    
+    <slot />
   </body>
 </html>
 
 <style is:global>
-/* Import our custom styles AFTER Utrecht CSS to ensure they take precedence */
-@import '../styles/variables.css';
-@import '../styles/colors.css';
-
-html, body {
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  background-color: var(--background);
-  color: var(--text);
-}
-
-:root {
-  --utrecht-document-max-inline-size: 100%;
-  --utrecht-page-max-inline-size: 100%;
-  --utrecht-page-content-max-inline-size: 80ch;
-}
-
-/* Focus styles for keyboard navigation */
-:focus {
-  outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
-  outline-offset: var(--focus-outline-offset);
-}
-</style> 
+  /* Import modern CSS variables and utilities */
+  @import '../styles/variables.css';
+  
+  /* Modern CSS Reset */
+  @layer reset {
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html {
+      /* Enable smooth scrolling with reduced motion support */
+      scroll-behavior: smooth;
+      
+      /* Prevent font size adjustments on mobile */
+      text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+      
+      /* Enable better text rendering */
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      
+      /* Modern text features */
+      font-synthesis: none;
+      hanging-punctuation: first last;
+      
+      /* Improve focus visibility */
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+    }
+    
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      line-height: 1.6;
+      font-family: var(--font-sans);
+      background: var(--color-bg);
+      color: var(--color-text);
+      
+      /* Prevent horizontal scroll */
+      overflow-x: hidden;
+      
+      /* Better font rendering on high DPI screens */
+      font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+      font-variant-ligatures: common-ligatures contextual;
+      
+      /* Transition for theme changes */
+      transition: 
+        background-color 300ms var(--ease-out-expo),
+        color 300ms var(--ease-out-expo);
+    }
+    
+    /* Remove default margins */
+    h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+      margin: 0;
+    }
+    
+    /* Set up proper heading hierarchy */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      line-height: 1.2;
+      text-wrap: balance;
+    }
+    
+    /* Improve readability */
+    p, li, dd {
+      text-wrap: pretty;
+      max-width: 75ch;
+    }
+    
+    /* Make images responsive by default */
+    img, picture, video, canvas, svg {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Inherit fonts for form controls */
+    input, button, textarea, select {
+      font: inherit;
+      color: inherit;
+    }
+    
+    /* Remove animations for reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+    
+    /* Focus styles for keyboard navigation */
+    :focus-visible {
+      outline: var(--focus-width) var(--focus-style) var(--focus-color);
+      outline-offset: var(--focus-offset);
+      border-radius: 2px;
+    }
+    
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+    
+    /* Selection styles */
+    ::selection {
+      background: color-mix(in oklch, var(--color-primary) 30%, transparent);
+      color: var(--color-text);
+    }
+    
+    /* Scrollbar styles for Webkit browsers */
+    @supports selector(::-webkit-scrollbar) {
+      ::-webkit-scrollbar {
+        width: 12px;
+        height: 12px;
+      }
+      
+      ::-webkit-scrollbar-track {
+        background: var(--color-surface);
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background: color-mix(in oklch, var(--color-text) 20%, transparent);
+        border-radius: 6px;
+        border: 2px solid var(--color-surface);
+      }
+      
+      ::-webkit-scrollbar-thumb:hover {
+        background: color-mix(in oklch, var(--color-text) 30%, transparent);
+      }
+    }
+    
+    /* Firefox scrollbar styles */
+    @supports (scrollbar-width: thin) {
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: 
+          color-mix(in oklch, var(--color-text) 20%, transparent)
+          var(--color-surface);
+      }
+    }
+    
+    /* Print styles */
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+      
+      @page {
+        margin: 2cm;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        page-break-after: avoid;
+      }
+      
+      p, li, blockquote {
+        orphans: 3;
+        widows: 3;
+      }
+    }
+  }
+  
+  /* Utility classes */
+  @layer utilities {
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+    
+    .container {
+      width: min(100% - 2rem, 1200px);
+      margin-inline: auto;
+      container-type: inline-size;
+    }
+    
+    /* Flow spacing utility */
+    .flow > * + * {
+      margin-block-start: var(--flow-space, 1em);
+    }
+  }
+</style>
